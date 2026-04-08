@@ -114,6 +114,7 @@
       background: white; border-radius: 10px; overflow: hidden;
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
+    #semantic-table .token-table { table-layout: fixed; }
     .token-table thead th {
       background: #F5F6FA; padding: 9px 14px; text-align: left;
       font-size: 10.5px; font-weight: 700; text-transform: uppercase;
@@ -186,6 +187,93 @@
 
     .hidden { display: none !important; }
 
+    /* ── Section controls ───────────────────── */
+    .section-controls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+    /* ── JSON open button ───────────────────── */
+    .json-btn {
+      padding: 5px 11px; border-radius: 6px;
+      border: 1px solid #E5E3E9; background: white;
+      font-size: 12px; font-weight: 600; color: #6F727B;
+      cursor: pointer; font-family: inherit; transition: all .15s;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .json-btn:hover { border-color: #C7CBD1; color: #35373B; }
+
+    /* ── JSON modal ─────────────────────────── */
+    .json-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      animation: fadeIn .15s ease;
+    }
+    .json-panel {
+      background: #1A1B1E; border-radius: 12px;
+      width: 90vw; max-width: 860px; height: 88vh;
+      display: flex; flex-direction: column;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6); overflow: hidden;
+    }
+    .json-panel-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 13px 18px; border-bottom: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0; background: #16171A;
+    }
+    .json-panel-title {
+      font-family: 'Cabin', sans-serif; font-size: 14px; font-weight: 700;
+      color: white; flex: 1;
+    }
+    .json-hdr-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 11px; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all .15s; white-space: nowrap;
+    }
+    .json-hdr-btn:hover { background: rgba(255,255,255,0.12); color: white; }
+    .json-hdr-close {
+      width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.45); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; transition: all .15s;
+    }
+    .json-hdr-close:hover { background: rgba(220,50,50,0.25); color: white; border-color: rgba(220,50,50,0.3); }
+    .json-panel-body {
+      flex: 1; overflow-y: auto; padding: 14px 18px;
+      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.12) transparent;
+    }
+    .json-panel-body::-webkit-scrollbar { width: 6px; }
+    .json-panel-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+    .json-group-wrap { margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; overflow: hidden; }
+    .json-group-hdr {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 13px; background: rgba(255,255,255,0.04);
+      cursor: pointer; user-select: none; transition: background .12s;
+    }
+    .json-group-hdr:hover { background: rgba(255,255,255,0.08); }
+    .json-chevron { color: rgba(255,255,255,0.3); flex-shrink: 0; transition: transform .18s; display: flex; align-items: center; }
+    .json-group-wrap.collapsed .json-chevron { transform: rotate(-90deg); }
+    .json-group-label {
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.6px; color: rgba(255,255,255,0.45); flex: 1;
+    }
+    .json-copy-group {
+      padding: 2px 8px; border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.1); background: none;
+      color: rgba(255,255,255,0.35); font-size: 10px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all .15s;
+    }
+    .json-copy-group:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); }
+    .json-group-body { padding: 12px 14px; }
+    .json-group-wrap.collapsed .json-group-body { display: none; }
+    pre.json-pre {
+      font-family: 'JetBrains Mono', monospace; font-size: 11.5px; line-height: 1.75;
+      white-space: pre-wrap; word-break: break-all; margin: 0; color: #CDD6F4;
+    }
+    .jk { color: #89B4FA; }
+    .js { color: #A6E3A1; }
+    .jn { color: #FAB387; }
+
     /* ── Responsive ─────────────────────────── */
     @media (max-width: 640px) {
       .header-meta { display: none; }
@@ -201,7 +289,7 @@
     <div class="logo-mark">R</div>
     <div>
       <div class="logo-name">Resi Design Tokens</div>
-      <div class="logo-sub">Resi Design Components · Branch ryA3ZhHm8Z3GxxwVigVPLx</div>
+      <div class="logo-sub">Resi Design Components · Version 1.0</div>
     </div>
   </div>
   <div class="search-wrap">
@@ -211,7 +299,6 @@
     </svg>
     <input type="text" id="search" placeholder="Search tokens…" oninput="filterTokens(this.value)" autocomplete="off" spellcheck="false">
   </div>
-  <div class="header-meta">365 tokens · 4 collections</div>
 </header>
 
 <nav class="tab-nav">
@@ -229,6 +316,9 @@
       <div>
         <div class="section-title">Primitives</div>
         <div class="section-desc">Raw design values — the foundation of all semantic tokens</div>
+      </div>
+      <div class="section-controls">
+        <button class="json-btn" onclick="openJsonModal('primitives')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/></svg> JSON</button>
       </div>
     </div>
     <div class="sub-tabs" id="prim-subtabs">
@@ -252,10 +342,13 @@
         <div class="section-title">Semantic Colors</div>
         <div class="section-desc">Context-aware tokens with Light &amp; Dark mode values — click a token name to copy</div>
       </div>
-      <div class="mode-toggle" id="color-mode-toggle">
-        <button class="mode-btn active" onclick="setColorMode('Light')">☀ Light</button>
-        <button class="mode-btn"        onclick="setColorMode('Dark')">◗ Dark</button>
-        <button class="mode-btn"        onclick="setColorMode('Both')">⊞ Both</button>
+      <div class="section-controls">
+        <div class="mode-toggle" id="color-mode-toggle">
+          <button class="mode-btn active" onclick="setColorMode('Light')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="vertical-align:-1px"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg> Light</button>
+          <button class="mode-btn"        onclick="setColorMode('Dark')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Dark</button>
+          <button class="mode-btn"        onclick="setColorMode('Both')">Both</button>
+        </div>
+        <button class="json-btn" onclick="openJsonModal('semantic')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/></svg> JSON</button>
       </div>
     </div>
     <div id="semantic-table"></div>
@@ -268,10 +361,13 @@
         <div class="section-title">Size &amp; Spacing</div>
         <div class="section-desc">Responsive padding, border radius, and viewport tokens</div>
       </div>
-      <div class="mode-toggle" id="spacing-mode-toggle">
-        <button class="mode-btn active" onclick="setSpacingMode('Desktop')">Desktop</button>
-        <button class="mode-btn"        onclick="setSpacingMode('Tablet')">Tablet</button>
-        <button class="mode-btn"        onclick="setSpacingMode('Mobile')">Mobile</button>
+      <div class="section-controls">
+        <div class="mode-toggle" id="spacing-mode-toggle">
+          <button class="mode-btn active" onclick="setSpacingMode('Desktop')">Desktop</button>
+          <button class="mode-btn"        onclick="setSpacingMode('Tablet')">Tablet</button>
+          <button class="mode-btn"        onclick="setSpacingMode('Mobile')">Mobile</button>
+        </div>
+        <button class="json-btn" onclick="openJsonModal('spacing')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/></svg> JSON</button>
       </div>
     </div>
     <div id="spacing-table"></div>
@@ -284,6 +380,9 @@
         <div class="section-title">Typography</div>
         <div class="section-desc">Text styles — font, weight, size, line height, letter spacing</div>
       </div>
+      <div class="section-controls">
+        <button class="json-btn" onclick="openJsonModal('typography')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/></svg> JSON</button>
+      </div>
     </div>
     <div id="typography-table"></div>
   </div>
@@ -292,6 +391,19 @@
 </div><!-- /main -->
 
 <div class="toast" id="toast"></div>
+
+<!-- ══ JSON MODAL ══════════════════════════════════════════ -->
+<div id="json-modal" class="json-overlay hidden" onclick="closeJsonModal()">
+  <div class="json-panel" onclick="event.stopPropagation()">
+    <div class="json-panel-header">
+      <span id="json-modal-title" class="json-panel-title"></span>
+      <button class="json-hdr-btn" onclick="copyAllJSON()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> Copy All</button>
+      <button class="json-hdr-btn" onclick="downloadJSON()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+      <button class="json-hdr-close" onclick="closeJsonModal()">✕</button>
+    </div>
+    <div class="json-panel-body" id="json-modal-body"></div>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════════════════════
@@ -796,7 +908,9 @@ function renderSemantic() {
     html += '<div class="token-group"><div class="group-title">'+gName+'</div>';
 
     if (mode === 'Both') {
-      html += '<table class="token-table"><thead><tr>'
+      html += '<table class="token-table">'
+        +'<colgroup><col style="width:24%"><col style="width:19%"><col style="width:19%"><col style="width:19%"><col style="width:19%"></colgroup>'
+        +'<thead><tr>'
         +'<th>Token</th>'
         +'<th>☀ Light Alias</th><th>☀ Light</th>'
         +'<th>◗ Dark Alias</th><th>◗ Dark</th>'
@@ -814,8 +928,10 @@ function renderSemantic() {
           +'</tr>';
       });
     } else {
-      html += '<table class="token-table"><thead><tr>'
-        +'<th>Token</th><th>Alias ('+mode+')</th><th>Value</th>'
+      html += '<table class="token-table">'
+        +'<colgroup><col style="width:35%"><col style="width:40%"><col style="width:25%"></colgroup>'
+        +'<thead><tr>'
+        +'<th>TOKEN</th><th>ALIAS ('+mode+')</th><th>VALUE</th>'
         +'</tr></thead><tbody>';
       tokens.forEach(function(t) {
         var modeData = t[mode];
@@ -986,6 +1102,158 @@ function renderCurrent() {
   else if (t === 'spacing') renderSpacing();
   else if (t === 'typography') renderTypography();
 }
+
+// ═══════════════════════════════════════════════════════════
+// JSON MODAL
+// ═══════════════════════════════════════════════════════════
+
+var _jsonGroups = [];
+
+function buildPrimitivesJSON() {
+  var colorGroups = [
+    {label:'common',items:COLORS.common},{label:'navy',items:COLORS.navy},
+    {label:'resi',items:COLORS.resi},{label:'red',items:COLORS.red},
+    {label:'green',items:COLORS.green},{label:'yellow',items:COLORS.yellow},
+    {label:'purple',items:COLORS.purple},{label:'blue',items:COLORS.blue},
+    {label:'grey',items:COLORS.grey}
+  ];
+  var colorsData = {};
+  colorGroups.forEach(function(cg) {
+    colorsData[cg.label] = {};
+    cg.items.forEach(function(c) { colorsData[cg.label][c.name] = {value: toHex(c.r,c.g,c.b,c.a)}; });
+  });
+  var brandData = {};
+  BRAND.forEach(function(c) { brandData[c.name] = {value: toHex(c.r,c.g,c.b,c.a)}; });
+  var alphaData = {};
+  ALPHA.forEach(function(c) { alphaData[c.name] = {value: toHex(c.r,c.g,c.b,c.a)}; });
+  var sizesData = {};
+  SIZES.forEach(function(s) { sizesData['size/'+s] = {value: s}; });
+  var typoData = {};
+  TYPO_PRIM.fontFamily.forEach(function(f) { typoData['typography/font-family/'+f.toLowerCase().replace(' ','-')] = {value: f}; });
+  TYPO_PRIM.fontWeight.forEach(function(w) { typoData['typography/font-weight/'+w.name.toLowerCase()] = {value: w.val}; });
+  TYPO_PRIM.fontSize.forEach(function(s) { typoData['typography/font-size/'+s] = {value: s}; });
+  TYPO_PRIM.lineHeight.forEach(function(lh) { typoData['typography/line-height/'+lh] = {value: lh}; });
+  TYPO_PRIM.letterSpacing.forEach(function(ls) { typoData[ls.tok] = {value: ls.val}; });
+  return [
+    {group:'Colors', data:colorsData},
+    {group:'Brand', data:brandData},
+    {group:'Alpha', data:alphaData},
+    {group:'Sizes', data:sizesData},
+    {group:'Typography Primitives', data:typoData}
+  ];
+}
+
+function buildSemanticJSON() {
+  var groupMap = {};
+  SEMANTIC.forEach(function(t) {
+    if (!groupMap[t.g]) groupMap[t.g] = {};
+    var lP = PRIM_MAP[t.Light.alias], dP = PRIM_MAP[t.Dark.alias];
+    groupMap[t.g][t.name] = {
+      light: {alias: t.Light.alias, value: lP ? toHex(lP.r,lP.g,lP.b,lP.a) : null},
+      dark:  {alias: t.Dark.alias,  value: dP ? toHex(dP.r,dP.g,dP.b,dP.a) : null}
+    };
+  });
+  return Object.keys(groupMap).map(function(g) { return {group:g, data:groupMap[g]}; });
+}
+
+function buildSpacingJSON() {
+  var groupMap = {};
+  SPACING.forEach(function(t) {
+    if (!groupMap[t.g]) groupMap[t.g] = {};
+    var entry = {scope: t.scope};
+    ['Desktop','Tablet','Mobile'].forEach(function(mode) {
+      var mv = t[mode];
+      if (mv === undefined) return;
+      if (typeof mv === 'object' && mv.alias) {
+        var pr = PRIM_MAP[mv.alias];
+        entry[mode.toLowerCase()] = {alias: mv.alias, value: pr ? pr.value : null};
+      } else {
+        entry[mode.toLowerCase()] = {value: mv};
+      }
+    });
+    groupMap[t.g][t.name] = entry;
+  });
+  return Object.keys(groupMap).map(function(g) { return {group:g, data:groupMap[g]}; });
+}
+
+function buildTypographyJSON() {
+  var groupMap = {};
+  TYPO_STYLES.forEach(function(t) {
+    if (!groupMap[t.g]) groupMap[t.g] = {};
+    groupMap[t.g][t.name] = {fontFamily:t.font, fontWeight:t.weight, fontWeightValue:t.wVal, fontSize:t.size, lineHeight:t.lh, letterSpacing:t.ls};
+  });
+  return Object.keys(groupMap).map(function(g) { return {group:g, data:groupMap[g]}; });
+}
+
+function highlightJSON(str) {
+  str = str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return str
+    .replace(/"([^"]+)"\s*:/g, '<span class="jk">"$1"</span>:')
+    .replace(/:\s*("(?:[^"\\]|\\.)*")/g, ': <span class="js">$1</span>')
+    .replace(/:\s*(-?\d+(?:\.\d+)?)\b/g, ': <span class="jn">$1</span>')
+    .replace(/:\s*(true|false|null)\b/g, ': <span class="jn">$1</span>');
+}
+
+function openJsonModal(tab) {
+  var groups, title;
+  if (tab === 'primitives')  { groups = buildPrimitivesJSON();  title = 'Primitives'; }
+  else if (tab === 'semantic')   { groups = buildSemanticJSON();    title = 'Semantic Colors'; }
+  else if (tab === 'spacing')    { groups = buildSpacingJSON();     title = 'Size & Spacing'; }
+  else if (tab === 'typography') { groups = buildTypographyJSON();  title = 'Typography'; }
+  _jsonGroups = groups;
+  var fullObj = {};
+  groups.forEach(function(g) { fullObj[g.group] = g.data; });
+  var fullJSON = JSON.stringify(fullObj, null, 2);
+  var modal = document.getElementById('json-modal');
+  modal.dataset.fullJson = fullJSON;
+  modal.dataset.title = title;
+  document.getElementById('json-modal-title').textContent = title + ' — JSON';
+  var html = '';
+  groups.forEach(function(g, i) {
+    html += '<div class="json-group-wrap" id="jg-'+i+'">'
+      +'<div class="json-group-hdr" onclick="toggleJsonGroup('+i+')">'
+      +'<span class="json-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>'
+      +'<span class="json-group-label">'+g.group+'</span>'
+      +'<button class="json-copy-group" onclick="event.stopPropagation();copyJsonGroup('+i+')">Copy</button>'
+      +'</div>'
+      +'<div class="json-group-body"><pre class="json-pre">'+highlightJSON(JSON.stringify(g.data, null, 2))+'</pre></div>'
+      +'</div>';
+  });
+  document.getElementById('json-modal-body').innerHTML = html;
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeJsonModal() {
+  document.getElementById('json-modal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function toggleJsonGroup(i) {
+  document.getElementById('jg-'+i).classList.toggle('collapsed');
+}
+
+function copyJsonGroup(i) {
+  copy(JSON.stringify(_jsonGroups[i].data, null, 2));
+}
+
+function copyAllJSON() {
+  copy(document.getElementById('json-modal').dataset.fullJson);
+}
+
+function downloadJSON() {
+  var modal = document.getElementById('json-modal');
+  var blob = new Blob([modal.dataset.fullJson], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = modal.dataset.title.toLowerCase().replace(/[\s&]+/g,'-') + '-tokens.json';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(a.href);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeJsonModal();
+});
 
 // ═══════════════════════════════════════════════════════════
 // INIT
