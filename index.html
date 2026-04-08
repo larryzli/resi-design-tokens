@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resi Design Tokens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;700&family=Open+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Open Sans', system-ui, sans-serif; background: #F5F6FA; color: #35373B; font-size: 14px; line-height: 1.5; }
+
+    /* ── Header ─────────────────────────────── */
+    .app-header {
+      background: #242528; color: white; padding: 14px 24px;
+      display: flex; align-items: center; gap: 16px;
+      position: sticky; top: 0; z-index: 200;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+    .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .logo-mark {
+      width: 34px; height: 34px; background: #FF585D; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cabin', sans-serif; font-weight: 700; font-size: 20px; color: white;
+    }
+    .logo-name { font-family: 'Cabin', sans-serif; font-weight: 700; font-size: 17px; line-height: 1.2; }
+    .logo-sub { font-size: 11px; color: rgba(255,255,255,0.45); }
+
+    .search-wrap { flex: 1; max-width: 380px; margin-left: auto; position: relative; }
+    .search-wrap input {
+      width: 100%; padding: 8px 12px 8px 34px;
+      border: 1px solid rgba(255,255,255,0.14); border-radius: 8px;
+      background: rgba(255,255,255,0.08); color: white; font-size: 13px; outline: none;
+      font-family: inherit;
+    }
+    .search-wrap input::placeholder { color: rgba(255,255,255,0.35); }
+    .search-wrap input:focus { border-color: #FF585D; background: rgba(255,255,255,0.12); }
+    .search-ico { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity: 0.35; pointer-events: none; }
+
+    .header-meta { font-size: 11px; color: rgba(255,255,255,0.35); white-space: nowrap; }
+
+    /* ── Tab nav ────────────────────────────── */
+    .tab-nav {
+      background: white; border-bottom: 1px solid #E5E3E9;
+      padding: 0 24px; display: flex; gap: 2px;
+      position: sticky; top: 62px; z-index: 190;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .tab-nav::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      padding: 12px 16px; font-size: 13px; font-weight: 600;
+      color: #6F727B; border: none; background: none; cursor: pointer;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+      transition: color .15s, border-color .15s; white-space: nowrap;
+      font-family: inherit;
+    }
+    .tab-btn:hover { color: #242528; }
+    .tab-btn.active { color: #FF585D; border-bottom-color: #FF585D; }
+
+    /* ── Main ───────────────────────────────── */
+    .main { padding: 24px; max-width: 1440px; margin: 0 auto; }
+    .section { display: none; animation: fadeIn .15s ease; }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    /* ── Section header ─────────────────────── */
+    .section-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
+    .section-title { font-family: 'Cabin', sans-serif; font-size: 22px; font-weight: 700; color: #242528; }
+    .section-desc { font-size: 13px; color: #91949C; margin-top: 3px; }
+
+    /* ── Mode toggle ────────────────────────── */
+    .mode-toggle { display: flex; gap: 3px; background: #F1F1F5; border-radius: 8px; padding: 3px; flex-shrink: 0; }
+    .mode-btn {
+      padding: 5px 12px; border-radius: 6px; border: none; background: none;
+      font-size: 12px; font-weight: 600; color: #6F727B; cursor: pointer;
+      transition: all .15s; font-family: inherit; white-space: nowrap;
+    }
+    .mode-btn.active { background: white; color: #242528; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+    /* ── Sub-tabs ───────────────────────────── */
+    .sub-tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+    .sub-tab-btn {
+      padding: 5px 13px; border-radius: 6px; border: 1px solid #E5E3E9;
+      background: white; font-size: 12px; font-weight: 600;
+      color: #6F727B; cursor: pointer; transition: all .15s; font-family: inherit;
+    }
+    .sub-tab-btn:hover { border-color: #C7CBD1; color: #35373B; }
+    .sub-tab-btn.active { background: #FF585D; border-color: #FF585D; color: white; }
+
+    /* ── Token groups ───────────────────────── */
+    .token-group { margin-bottom: 28px; }
+    .group-title {
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.7px; color: #91949C; margin-bottom: 10px; padding-left: 1px;
+    }
+
+    /* ── Palette grid ───────────────────────── */
+    .palette-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+    .swatch-card {
+      border-radius: 8px; overflow: hidden; border: 1px solid rgba(0,0,0,0.06);
+      cursor: pointer; transition: transform .12s, box-shadow .12s; background: white;
+    }
+    .swatch-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+    .swatch-color { height: 60px; position: relative; }
+    .swatch-copy { position: absolute; top: 4px; right: 6px; font-size: 11px; opacity: 0; transition: opacity .15s; }
+    .swatch-card:hover .swatch-copy { opacity: 0.8; }
+    .swatch-info { padding: 6px 7px 7px; }
+    .swatch-name { font-size: 9.5px; font-weight: 600; color: #35373B; line-height: 1.3; }
+    .swatch-hex { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #91949C; margin-top: 2px; }
+
+    /* ── Token table ────────────────────────── */
+    .token-table {
+      width: 100%; border-collapse: collapse;
+      background: white; border-radius: 10px; overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .token-table thead th {
+      background: #F5F6FA; padding: 9px 14px; text-align: left;
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: #6F727B; border-bottom: 1px solid #E5E3E9;
+    }
+    .token-table tbody tr { border-bottom: 1px solid #F1F1F5; transition: background .1s; }
+    .token-table tbody tr:last-child { border-bottom: none; }
+    .token-table tbody tr:hover { background: #FAFAFA; }
+    .token-table td { padding: 9px 14px; vertical-align: middle; }
+
+    /* ── Token name ─────────────────────────── */
+    .tok {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #35373B;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+    }
+    .tok:hover { color: #FF585D; }
+    .tok-copy { font-size: 10px; color: #C7CBD1; opacity: 0; transition: opacity .15s; }
+    .tok:hover .tok-copy { opacity: 1; }
+
+    /* ── Color cell ─────────────────────────── */
+    .color-cell { display: flex; align-items: center; gap: 9px; }
+    .color-swatch {
+      width: 26px; height: 26px; border-radius: 6px;
+      border: 1px solid rgba(0,0,0,0.08); flex-shrink: 0;
+    }
+    .color-hex { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+    .color-alias { font-size: 11px; color: #91949C; }
+
+    /* ── Alias tag ──────────────────────────── */
+    .tag-alias {
+      display: inline-block; padding: 2px 6px; border-radius: 4px;
+      font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+      background: #F4E5FF; color: #7200C5; line-height: 1.4;
+    }
+
+    /* ── Size bar ───────────────────────────── */
+    .size-bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .size-bar { height: 8px; border-radius: 4px; min-width: 2px; }
+    .size-bar.resi { background: #FF585D; }
+    .size-val { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+    /* ── Checkerboard for alpha ─────────────── */
+    .checker {
+      width: 26px; height: 26px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08);
+      flex-shrink: 0; position: relative; overflow: hidden;
+      background-image: linear-gradient(45deg, #ddd 25%, transparent 25%),
+        linear-gradient(-45deg, #ddd 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ddd 75%),
+        linear-gradient(-45deg, transparent 75%, #ddd 75%);
+      background-size: 8px 8px;
+      background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+      background-color: #fff;
+    }
+    .checker-fill { position: absolute; inset: 0; }
+
+    /* ── Toast ──────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; z-index: 999;
+      transform: translateX(-50%) translateY(80px);
+      background: #35373B; color: white; padding: 10px 20px;
+      border-radius: 8px; font-size: 13px; font-weight: 600;
+      transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+      pointer-events: none; max-width: 90vw; text-align: center;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── No results ─────────────────────────── */
+    .no-results { text-align: center; padding: 56px 24px; color: #91949C; }
+    .no-results-icon { font-size: 36px; margin-bottom: 10px; }
+
+    .hidden { display: none !important; }
+
+    /* ── Responsive ─────────────────────────── */
+    @media (max-width: 640px) {
+      .header-meta { display: none; }
+      .main { padding: 16px; }
+      .palette-grid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="logo">
+    <div class="logo-mark">R</div>
+    <div>
+      <div class="logo-name">Resi Design Tokens</div>
+      <div class="logo-sub">Resi Design Components · Branch ryA3ZhHm8Z3GxxwVigVPLx</div>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <svg class="search-ico" width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <circle cx="5.5" cy="5.5" r="4" stroke="white" stroke-width="1.5"/>
+      <line x1="8.8" y1="8.8" x2="13" y2="13" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <input type="text" id="search" placeholder="Search tokens…" oninput="filterTokens(this.value)" autocomplete="off" spellcheck="false">
+  </div>
+  <div class="header-meta">365 tokens · 4 collections</div>
+</header>
+
+<nav class="tab-nav">
+  <button class="tab-btn active"  onclick="showTab('primitives')">Primitives</button>
+  <button class="tab-btn"         onclick="showTab('semantic')">Semantic Colors</button>
+  <button class="tab-btn"         onclick="showTab('spacing')">Size &amp; Spacing</button>
+  <button class="tab-btn"         onclick="showTab('typography')">Typography</button>
+</nav>
+
+<div class="main">
+
+  <!-- ══ PRIMITIVES ═══════════════════════════════════════ -->
+  <div id="tab-primitives" class="section active">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Primitives</div>
+        <div class="section-desc">Raw design values — the foundation of all semantic tokens</div>
+      </div>
+    </div>
+    <div class="sub-tabs" id="prim-subtabs">
+      <button class="sub-tab-btn active" onclick="showPrimGroup('colors')">Colors</button>
+      <button class="sub-tab-btn"        onclick="showPrimGroup('brand')">Brand</button>
+      <button class="sub-tab-btn"        onclick="showPrimGroup('alpha')">Alpha</button>
+      <button class="sub-tab-btn"        onclick="showPrimGroup('sizes')">Sizes</button>
+      <button class="sub-tab-btn"        onclick="showPrimGroup('typo')">Typography Primitives</button>
+    </div>
+    <div id="prim-colors"></div>
+    <div id="prim-brand"  class="hidden"></div>
+    <div id="prim-alpha"  class="hidden"></div>
+    <div id="prim-sizes"  class="hidden"></div>
+    <div id="prim-typo"   class="hidden"></div>
+  </div>
+
+  <!-- ══ SEMANTIC COLORS ══════════════════════════════════ -->
+  <div id="tab-semantic" class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Semantic Colors</div>
+        <div class="section-desc">Context-aware tokens with Light &amp; Dark mode values — click a token name to copy</div>
+      </div>
+      <div class="mode-toggle" id="color-mode-toggle">
+        <button class="mode-btn active" onclick="setColorMode('Light')">☀ Light</button>
+        <button class="mode-btn"        onclick="setColorMode('Dark')">◗ Dark</button>
+        <button class="mode-btn"        onclick="setColorMode('Both')">⊞ Both</button>
+      </div>
+    </div>
+    <div id="semantic-table"></div>
+  </div>
+
+  <!-- ══ SIZE & SPACING ═══════════════════════════════════ -->
+  <div id="tab-spacing" class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Size &amp; Spacing</div>
+        <div class="section-desc">Responsive padding, border radius, and viewport tokens</div>
+      </div>
+      <div class="mode-toggle" id="spacing-mode-toggle">
+        <button class="mode-btn active" onclick="setSpacingMode('Desktop')">Desktop</button>
+        <button class="mode-btn"        onclick="setSpacingMode('Tablet')">Tablet</button>
+        <button class="mode-btn"        onclick="setSpacingMode('Mobile')">Mobile</button>
+      </div>
+    </div>
+    <div id="spacing-table"></div>
+  </div>
+
+  <!-- ══ TYPOGRAPHY ═══════════════════════════════════════ -->
+  <div id="tab-typography" class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Typography</div>
+        <div class="section-desc">Text styles — font, weight, size, line height, letter spacing</div>
+      </div>
+    </div>
+    <div id="typography-table"></div>
+  </div>
+
+
+</div><!-- /main -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════
+
+function toHex(r, g, b, a) {
+  if (a === undefined) a = 1;
+  const h = n => Math.round(n * 255).toString(16).padStart(2,'0').toUpperCase();
+  if (a < 1) return 'rgba('+Math.round(r*255)+','+Math.round(g*255)+','+Math.round(b*255)+','+a.toFixed(2)+')';
+  return '#'+h(r)+h(g)+h(b);
+}
+
+function isDark(r, g, b) {
+  return (r * 0.299 + g * 0.587 + b * 0.114) < 0.53;
+}
+
+function copy(text) {
+  navigator.clipboard.writeText(text).catch(function() {
+    var el = document.createElement('textarea');
+    el.value = text; document.body.appendChild(el);
+    el.select(); document.execCommand('copy'); document.body.removeChild(el);
+  });
+  var t = document.getElementById('toast');
+  t.textContent = 'Copied: ' + text;
+  t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(function(){ t.classList.remove('show'); }, 2000);
+}
+
+function tokenEl(name) {
+  return '<span class="tok" onclick="copy(\''+name+'\')">'+name+'<span class="tok-copy">⎘</span></span>';
+}
+
+function noResults() {
+  return '<div class="no-results"><div class="no-results-icon">🔍</div><div>No tokens match your search</div></div>';
+}
+
+// ═══════════════════════════════════════════════════════════
+// TOKEN DATA
+// ═══════════════════════════════════════════════════════════
+
+var COLORS = {
+  common: [
+    {name:'colors/common/white', r:1,    g:1,      b:1,      a:1},
+    {name:'colors/common/black', r:0,    g:0,      b:0,      a:1}
+  ],
+  navy: [
+    {name:'colors/navy/100', r:.8627, g:.9020, b:.9451, a:1},
+    {name:'colors/navy/200', r:.7255, g:.8000, b:.8902, a:1},
+    {name:'colors/navy/300', r:.5922, g:.7020, b:.8314, a:1},
+    {name:'colors/navy/400', r:.4549, g:.6000, b:.7765, a:1},
+    {name:'colors/navy/500', r:.3176, g:.5020, b:.7216, a:1},
+    {name:'colors/navy/600', r:.2314, g:.4000, b:.6078, a:1},
+    {name:'colors/navy/700', r:.1725, g:.3098, b:.4824, a:1},
+    {name:'colors/navy/800', r:.1255, g:.2118, b:.3098, a:1},
+    {name:'colors/navy/900', r:.0824, g:.1176, b:.1608, a:1}
+  ],
+  resi: [
+    {name:'colors/resi/100', r:1,     g:.8706, b:.8745, a:1},
+    {name:'colors/resi/200', r:1,     g:.7373, b:.7451, a:1},
+    {name:'colors/resi/300', r:1,     g:.6078, b:.6196, a:1},
+    {name:'colors/resi/400', r:1,     g:.4745, b:.4902, a:1},
+    {name:'colors/resi/500', r:1,     g:.3451, b:.3647, a:1},
+    {name:'colors/resi/600', r:.8235, g:.3020, b:.3176, a:1},
+    {name:'colors/resi/700', r:.6471, g:.2549, b:.2667, a:1},
+    {name:'colors/resi/800', r:.4706, g:.2118, b:.2196, a:1},
+    {name:'colors/resi/900', r:.2980, g:.1647, b:.1686, a:1}
+  ],
+  red: [
+    {name:'colors/red/100', r:1,     g:.8588, b:.8392, a:1},
+    {name:'colors/red/200', r:1,     g:.6784, b:.6314, a:1},
+    {name:'colors/red/300', r:1,     g:.4941, b:.4235, a:1},
+    {name:'colors/red/400', r:.9804, g:.3176, b:.2275, a:1},
+    {name:'colors/red/500', r:.8980, g:.1059, b:0,     a:1},
+    {name:'colors/red/600', r:.7294, g:.0745, b:.0353, a:1},
+    {name:'colors/red/700', r:.5725, g:.0941, b:.0314, a:1},
+    {name:'colors/red/800', r:.4078, g:.0902, b:.0471, a:1},
+    {name:'colors/red/900', r:.2745, g:.0627, b:.0471, a:1}
+  ],
+  green: [
+    {name:'colors/green/100', r:.8000, g:.9490, b:.8784, a:1},
+    {name:'colors/green/200', r:.5373, g:.8235, b:.6902, a:1},
+    {name:'colors/green/300', r:.3059, g:.7333, b:.5333, a:1},
+    {name:'colors/green/400', r:.1529, g:.6588, b:.4235, a:1},
+    {name:'colors/green/500', r:.0549, g:.5569, b:.3373, a:1},
+    {name:'colors/green/600', r:.0392, g:.4824, b:.2824, a:1},
+    {name:'colors/green/700', r:.0157, g:.4039, b:.2118, a:1},
+    {name:'colors/green/800', r:.0353, g:.3098, b:.1725, a:1},
+    {name:'colors/green/900', r:.0392, g:.2196, b:.1294, a:1}
+  ],
+  yellow: [
+    {name:'colors/yellow/100', r:1,     g:.9216, b:.7647, a:1},
+    {name:'colors/yellow/200', r:1,     g:.8235, b:.4706, a:1},
+    {name:'colors/yellow/300', r:1,     g:.7569, b:.2745, a:1},
+    {name:'colors/yellow/400', r:1,     g:.6667, b:0,     a:1},
+    {name:'colors/yellow/500', r:.9373, g:.5059, b:0,     a:1},
+    {name:'colors/yellow/600', r:.8667, g:.3647, b:0,     a:1},
+    {name:'colors/yellow/700', r:.6627, g:.2588, b:.0353, a:1},
+    {name:'colors/yellow/800', r:.4706, g:.1765, b:.0510, a:1},
+    {name:'colors/yellow/900', r:.3098, g:.1294, b:.0549, a:1}
+  ],
+  purple: [
+    {name:'colors/purple/100', r:.9569, g:.8980, b:1,     a:1},
+    {name:'colors/purple/200', r:.8588, g:.6706, b:1,     a:1},
+    {name:'colors/purple/300', r:.7647, g:.4471, b:1,     a:1},
+    {name:'colors/purple/400', r:.6706, g:.2235, b:1,     a:1},
+    {name:'colors/purple/500', r:.5765, g:0,     b:1,     a:1},
+    {name:'colors/purple/600', r:.4471, g:0,     b:.7725, a:1},
+    {name:'colors/purple/700', r:.3176, g:0,     b:.5490, a:1},
+    {name:'colors/purple/800', r:.1882, g:0,     b:.3255, a:1},
+    {name:'colors/purple/900', r:.0588, g:0,     b:.1020, a:1}
+  ],
+  blue: [
+    {name:'colors/blue/100', r:.8980, g:.9412, b:1,     a:1},
+    {name:'colors/blue/300', r:.4471, g:.6824, b:.9882, a:1},
+    {name:'colors/blue/500', r:0,     g:.4157, b:.9804, a:1}
+  ],
+  grey: [
+    {name:'colors/grey/050',  r:.9843, g:.9843, b:.9843, a:1},
+    {name:'colors/grey/100',  r:.9608, g:.9647, b:.9804, a:1},
+    {name:'colors/grey/200',  r:.9451, g:.9451, b:.9608, a:1},
+    {name:'colors/grey/300',  r:.8980, g:.8902, b:.9137, a:1},
+    {name:'colors/grey/400',  r:.7804, g:.7961, b:.8196, a:1},
+    {name:'colors/grey/500',  r:.6745, g:.6824, b:.7059, a:1},
+    {name:'colors/grey/600',  r:.5686, g:.5804, b:.6118, a:1},
+    {name:'colors/grey/700',  r:.4353, g:.4471, b:.4824, a:1},
+    {name:'colors/grey/800',  r:.3333, g:.3412, b:.3686, a:1},
+    {name:'colors/grey/900',  r:.2941, g:.3020, b:.3255, a:1},
+    {name:'colors/grey/1000', r:.2078, g:.2157, b:.2314, a:1},
+    {name:'colors/grey/1100', r:.1412, g:.1451, b:.1569, a:1}
+  ]
+};
+
+var BRAND = [
+  {name:'brand/resi-red',  r:1,     g:.3451, b:.3647, a:1},
+  {name:'brand/fiord',     r:.2784, g:.3647, b:.4784, a:1},
+  {name:'brand/fedora',    r:.2706, g:.2549, b:.2667, a:1},
+  {name:'brand/maverick',  r:.8980, g:.8824, b:.9020, a:1},
+  {name:'brand/pushpay',   r:.1176, g:.1569, b:.3176, a:1}
+];
+
+var ALPHA = [
+  {name:'alpha/black/0%',    r:0,     g:0,     b:0,     a:0},
+  {name:'alpha/black/65%',   r:0,     g:0,     b:0,     a:.65},
+  {name:'alpha/black/100%',  r:0,     g:0,     b:0,     a:1},
+  {name:'alpha/white/0%',    r:1,     g:1,     b:1,     a:0},
+  {name:'alpha/white/100%',  r:1,     g:1,     b:1,     a:1},
+  {name:'alpha/100/0%',      r:.9608, g:.9647, b:.9804, a:0},
+  {name:'alpha/100/100%',    r:.9608, g:.9647, b:.9804, a:1},
+  {name:'alpha/1000/0%',     r:.2078, g:.2157, b:.2314, a:0},
+  {name:'alpha/1000/100%',   r:.2078, g:.2157, b:.2314, a:1},
+  {name:'alpha/1100/0%',     r:.1412, g:.1451, b:.1569, a:0},
+  {name:'alpha/1100/100%',   r:.1412, g:.1451, b:.1569, a:1}
+];
+
+var SIZES = [0,1,2,4,6,8,10,12,14,16,20,24,28,32,36,40,44,48,56,64,80,96,112,128,144,160,176,192,208,224,240,256,288,320,352,384,448,512,640,768,1024,1440];
+
+var TYPO_PRIM = {
+  fontFamily: ['Cabin','Open Sans'],
+  fontWeight: [{name:'Regular',val:'400'},{name:'SemiBold',val:'600'},{name:'Bold',val:'700'}],
+  fontSize:   [12,14,16,18,24,32,36,40,48,64,128],
+  lineHeight: [18,21,22,24,27,30,32,40,44,48,50,72,96,192],
+  letterSpacing: [{tok:'typography/letter-spacing/-1',val:-1},{tok:'typography/letter-spacing/0',val:0},{tok:'typography/letter-spacing/25',val:0.25},{tok:'typography/letter-spacing/50',val:0.5},{tok:'typography/letter-spacing/75',val:0.75},{tok:'typography/letter-spacing/100',val:1},{tok:'typography/letter-spacing/200',val:2}]
+};
+
+// Primitive lookup map (name → color obj)
+var PRIM_MAP = {};
+(function() {
+  var all = [].concat(
+    COLORS.common, COLORS.navy, COLORS.resi, COLORS.red, COLORS.green,
+    COLORS.yellow, COLORS.purple, COLORS.blue, COLORS.grey, BRAND, ALPHA
+  );
+  all.forEach(function(c){ PRIM_MAP[c.name] = c; });
+  SIZES.forEach(function(s){ PRIM_MAP['size/'+s] = {value:s}; });
+})();
+
+// ── Semantic Colors ─────────────────────────────────────────
+var SEMANTIC = [
+  // Text
+  {g:'text', name:'text/body',          Light:{alias:'colors/grey/800'},       Dark:{alias:'colors/grey/200'}},
+  {g:'text', name:'text/title',         Light:{alias:'colors/grey/1000'},      Dark:{alias:'colors/grey/100'}},
+  {g:'text', name:'text/secondary',     Light:{alias:'colors/grey/600'},       Dark:{alias:'colors/grey/300'}},
+  {g:'text', name:'text/disabled',      Light:{alias:'colors/grey/500'},       Dark:{alias:'colors/grey/600'}},
+  {g:'text', name:'text/light',         Light:{alias:'colors/grey/100'},       Dark:{alias:'colors/grey/100'}},
+  {g:'text', name:'text/link/default',  Light:{alias:'colors/navy/500'},       Dark:{alias:'colors/navy/300'}},
+  {g:'text', name:'text/link/visited',  Light:{alias:'colors/purple/500'},     Dark:{alias:'colors/purple/300'}},
+  // Surface
+  {g:'surface', name:'surface/canvas',  Light:{alias:'colors/common/white'},   Dark:{alias:'colors/grey/1000'}},
+  {g:'surface', name:'surface/default', Light:{alias:'colors/grey/100'},       Dark:{alias:'colors/grey/1100'}},
+  {g:'surface', name:'surface/table',   Light:{alias:'colors/grey/050'},       Dark:{alias:'colors/grey/900'}},
+  {g:'surface', name:'surface/inverse', Light:{alias:'colors/grey/1000'},      Dark:{alias:'colors/grey/050'}},
+  // Border
+  {g:'border', name:'border',           Light:{alias:'colors/grey/400'},       Dark:{alias:'colors/grey/600'}},
+  {g:'border', name:'divider',          Light:{alias:'colors/grey/300'},       Dark:{alias:'colors/grey/800'}},
+  {g:'border', name:'focus',            Light:{alias:'colors/navy/200'},       Dark:{alias:'colors/navy/200'}},
+  // Disabled
+  {g:'disabled', name:'disabled/background', Light:{alias:'colors/grey/200'}, Dark:{alias:'colors/grey/800'}},
+  {g:'disabled', name:'disabled/foreground', Light:{alias:'colors/grey/500'}, Dark:{alias:'colors/grey/600'}},
+  // Action / Primary (Navy)
+  {g:'action/primary', name:'action/primary/main',           Light:{alias:'colors/navy/500'}, Dark:{alias:'colors/navy/400'}},
+  {g:'action/primary', name:'action/primary/hover',          Light:{alias:'colors/navy/400'}, Dark:{alias:'colors/navy/500'}},
+  {g:'action/primary', name:'action/primary/active',         Light:{alias:'colors/navy/600'}, Dark:{alias:'colors/navy/300'}},
+  {g:'action/primary', name:'action/primary/foreground',     Light:{alias:'colors/navy/600'}, Dark:{alias:'colors/navy/300'}},
+  {g:'action/primary', name:'action/primary/background',     Light:{alias:'colors/navy/100'}, Dark:{alias:'colors/navy/800'}},
+  {g:'action/primary', name:'action/primary/alt-background', Light:{alias:'colors/navy/200'}, Dark:{alias:'colors/navy/900'}},
+  // Action / Accent (Resi Red)
+  {g:'action/accent', name:'action/accent/main',           Light:{alias:'colors/resi/500'}, Dark:{alias:'colors/resi/400'}},
+  {g:'action/accent', name:'action/accent/hover',          Light:{alias:'colors/resi/400'}, Dark:{alias:'colors/resi/500'}},
+  {g:'action/accent', name:'action/accent/active',         Light:{alias:'colors/resi/600'}, Dark:{alias:'colors/resi/300'}},
+  {g:'action/accent', name:'action/accent/foreground',     Light:{alias:'colors/resi/600'}, Dark:{alias:'colors/resi/300'}},
+  {g:'action/accent', name:'action/accent/background',     Light:{alias:'colors/resi/100'}, Dark:{alias:'colors/resi/800'}},
+  {g:'action/accent', name:'action/accent/alt-background', Light:{alias:'colors/resi/200'}, Dark:{alias:'colors/resi/900'}},
+  // Action / Negative (Red)
+  {g:'action/negative', name:'action/negative/main',           Light:{alias:'colors/red/500'}, Dark:{alias:'colors/red/400'}},
+  {g:'action/negative', name:'action/negative/hover',          Light:{alias:'colors/red/400'}, Dark:{alias:'colors/red/500'}},
+  {g:'action/negative', name:'action/negative/active',         Light:{alias:'colors/red/600'}, Dark:{alias:'colors/red/300'}},
+  {g:'action/negative', name:'action/negative/foreground',     Light:{alias:'colors/red/600'}, Dark:{alias:'colors/red/300'}},
+  {g:'action/negative', name:'action/negative/background',     Light:{alias:'colors/red/100'}, Dark:{alias:'colors/red/800'}},
+  {g:'action/negative', name:'action/negative/alt-background', Light:{alias:'colors/red/200'}, Dark:{alias:'colors/red/900'}},
+  // Action / Positive (Green)
+  {g:'action/positive', name:'action/positive/main',           Light:{alias:'colors/green/500'}, Dark:{alias:'colors/green/400'}},
+  {g:'action/positive', name:'action/positive/hover',          Light:{alias:'colors/green/400'}, Dark:{alias:'colors/green/500'}},
+  {g:'action/positive', name:'action/positive/active',         Light:{alias:'colors/green/600'}, Dark:{alias:'colors/green/300'}},
+  {g:'action/positive', name:'action/positive/foreground',     Light:{alias:'colors/green/600'}, Dark:{alias:'colors/green/300'}},
+  {g:'action/positive', name:'action/positive/background',     Light:{alias:'colors/green/100'}, Dark:{alias:'colors/green/800'}},
+  {g:'action/positive', name:'action/positive/alt-background', Light:{alias:'colors/green/200'}, Dark:{alias:'colors/green/900'}},
+  // Action / Warning (Yellow)
+  {g:'action/warning', name:'action/warning/main',           Light:{alias:'colors/yellow/500'}, Dark:{alias:'colors/yellow/400'}},
+  {g:'action/warning', name:'action/warning/hover',          Light:{alias:'colors/yellow/400'}, Dark:{alias:'colors/yellow/500'}},
+  {g:'action/warning', name:'action/warning/active',         Light:{alias:'colors/yellow/600'}, Dark:{alias:'colors/yellow/300'}},
+  {g:'action/warning', name:'action/warning/foreground',     Light:{alias:'colors/yellow/600'}, Dark:{alias:'colors/yellow/300'}},
+  {g:'action/warning', name:'action/warning/background',     Light:{alias:'colors/yellow/100'}, Dark:{alias:'colors/yellow/800'}},
+  {g:'action/warning', name:'action/warning/alt-background', Light:{alias:'colors/yellow/200'}, Dark:{alias:'colors/yellow/900'}},
+  // Action / Neutral (Grey)
+  {g:'action/neutral', name:'action/neutral/main',           Light:{alias:'colors/grey/800'}, Dark:{alias:'colors/grey/700'}},
+  {g:'action/neutral', name:'action/neutral/hover',          Light:{alias:'colors/grey/700'}, Dark:{alias:'colors/grey/800'}},
+  {g:'action/neutral', name:'action/neutral/active',         Light:{alias:'colors/grey/900'}, Dark:{alias:'colors/grey/900'}},
+  {g:'action/neutral', name:'action/neutral/foreground',     Light:{alias:'colors/grey/900'}, Dark:{alias:'colors/grey/100'}},
+  {g:'action/neutral', name:'action/neutral/background',     Light:{alias:'colors/grey/300'}, Dark:{alias:'colors/grey/700'}},
+  {g:'action/neutral', name:'action/neutral/alt-background', Light:{alias:'colors/grey/400'}, Dark:{alias:'colors/grey/800'}},
+  // Action / Smart (Purple)
+  {g:'action/smart', name:'action/smart/main',           Light:{alias:'colors/purple/500'}, Dark:{alias:'colors/purple/400'}},
+  {g:'action/smart', name:'action/smart/hover',          Light:{alias:'colors/purple/400'}, Dark:{alias:'colors/purple/500'}},
+  {g:'action/smart', name:'action/smart/active',         Light:{alias:'colors/purple/600'}, Dark:{alias:'colors/purple/300'}},
+  {g:'action/smart', name:'action/smart/foreground',     Light:{alias:'colors/purple/600'}, Dark:{alias:'colors/purple/300'}},
+  {g:'action/smart', name:'action/smart/background',     Light:{alias:'colors/purple/100'}, Dark:{alias:'colors/purple/800'}},
+  {g:'action/smart', name:'action/smart/alt-background', Light:{alias:'colors/purple/200'}, Dark:{alias:'colors/purple/900'}},
+  // Brand
+  {g:'brand', name:'brand/resi-main',      Light:{alias:'brand/resi-red'}, Dark:{alias:'brand/resi-red'}},
+  {g:'brand', name:'brand/resi-alternate', Light:{alias:'brand/fiord'},    Dark:{alias:'brand/fiord'}},
+  {g:'brand', name:'brand/resi-bg',        Light:{alias:'brand/maverick'}, Dark:{alias:'brand/maverick'}},
+  {g:'brand', name:'brand/resi-bg-alt',    Light:{alias:'brand/fedora'},   Dark:{alias:'brand/fedora'}},
+  {g:'brand', name:'brand/pushpay-main',   Light:{alias:'brand/pushpay'},  Dark:{alias:'brand/pushpay'}},
+  // Utility
+  {g:'utility', name:'utility/contrast',               Light:{alias:'colors/common/black'}, Dark:{alias:'colors/common/white'}},
+  {g:'utility', name:'utility/contrast-inverse',        Light:{alias:'colors/common/white'}, Dark:{alias:'colors/common/black'}},
+  {g:'utility', name:'utility/gradient/canvas/full',    Light:{alias:'alpha/white/100%'},    Dark:{alias:'alpha/1000/100%'}},
+  {g:'utility', name:'utility/gradient/canvas/empty',   Light:{alias:'alpha/white/0%'},      Dark:{alias:'alpha/1000/0%'}},
+  {g:'utility', name:'utility/gradient/default/full',   Light:{alias:'alpha/100/100%'},      Dark:{alias:'alpha/1100/100%'}},
+  {g:'utility', name:'utility/gradient/default/empty',  Light:{alias:'alpha/100/0%'},        Dark:{alias:'alpha/1100/0%'}}
+];
+
+// ── Size & Spacing ──────────────────────────────────────────
+var SPACING = [
+  {g:'Padding', name:'padding/none',     scope:'GAP',           Desktop:{alias:'size/0'},   Tablet:{alias:'size/0'},   Mobile:{alias:'size/0'}},
+  {g:'Padding', name:'padding/xxxxs',    scope:'GAP',           Desktop:{alias:'size/2'},   Tablet:{alias:'size/2'},   Mobile:{alias:'size/2'}},
+  {g:'Padding', name:'padding/xxxs',     scope:'GAP',           Desktop:{alias:'size/4'},   Tablet:{alias:'size/4'},   Mobile:{alias:'size/4'}},
+  {g:'Padding', name:'padding/xxs',      scope:'GAP',           Desktop:{alias:'size/6'},   Tablet:{alias:'size/6'},   Mobile:{alias:'size/6'}},
+  {g:'Padding', name:'padding/xs',       scope:'GAP',           Desktop:{alias:'size/8'},   Tablet:{alias:'size/8'},   Mobile:{alias:'size/8'}},
+  {g:'Padding', name:'padding/sm',       scope:'GAP',           Desktop:{alias:'size/10'},  Tablet:{alias:'size/8'},   Mobile:{alias:'size/8'}},
+  {g:'Padding', name:'padding/med',      scope:'GAP',           Desktop:{alias:'size/12'},  Tablet:{alias:'size/12'},  Mobile:{alias:'size/12'}},
+  {g:'Padding', name:'padding/lg',       scope:'GAP',           Desktop:{alias:'size/16'},  Tablet:{alias:'size/16'},  Mobile:{alias:'size/16'}},
+  {g:'Padding', name:'padding/xl',       scope:'GAP',           Desktop:{alias:'size/24'},  Tablet:{alias:'size/24'},  Mobile:{alias:'size/24'}},
+  {g:'Padding', name:'padding/xxl',      scope:'GAP',           Desktop:{alias:'size/32'},  Tablet:{alias:'size/32'},  Mobile:{alias:'size/32'}},
+  {g:'Padding', name:'padding/xxxl',     scope:'GAP',           Desktop:{alias:'size/64'},  Tablet:{alias:'size/64'},  Mobile:{alias:'size/64'}},
+  {g:'Padding', name:'padding/xxxxl',    scope:'GAP',           Desktop:{alias:'size/128'}, Tablet:{alias:'size/128'}, Mobile:{alias:'size/128'}},
+  {g:'Padding', name:'padding/variable', scope:'GAP (responsive)', Desktop:{alias:'size/32'}, Tablet:{alias:'size/24'}, Mobile:{alias:'size/16'}},
+  {g:'Border Radius', name:'border-radius/none',  scope:'CORNER_RADIUS', Desktop:{alias:'size/0'}, Tablet:{alias:'size/0'}, Mobile:{alias:'size/0'}},
+  {g:'Border Radius', name:'border-radius/sm',    scope:'CORNER_RADIUS', Desktop:{alias:'size/2'}, Tablet:{alias:'size/2'}, Mobile:{alias:'size/2'}},
+  {g:'Border Radius', name:'border-radius/md',    scope:'CORNER_RADIUS', Desktop:{alias:'size/4'}, Tablet:{alias:'size/4'}, Mobile:{alias:'size/4'}},
+  {g:'Border Radius', name:'border-radius/lg',    scope:'CORNER_RADIUS', Desktop:{alias:'size/8'}, Tablet:{alias:'size/8'}, Mobile:{alias:'size/8'}},
+  {g:'Border Radius', name:'border-radius/round', scope:'CORNER_RADIUS', Desktop:9999, Tablet:9999, Mobile:9999}
+];
+
+// ── Typography Styles ───────────────────────────────────────
+var TYPO_STYLES = [
+  {g:'Display', name:'Display/Display 1', font:'Open Sans', weight:'Bold',     wVal:700, size:128, lh:192, ls:0.5},
+  {g:'Display', name:'Display/Display 2', font:'Open Sans', weight:'Bold',     wVal:700, size:64,  lh:96,  ls:0.5},
+  {g:'Display', name:'Display/Display 3', font:'Open Sans', weight:'Bold',     wVal:700, size:48,  lh:72,  ls:0},
+  {g:'Display', name:'Display/Display 4', font:'Open Sans', weight:'Bold',     wVal:700, size:32,  lh:48,  ls:0},
+  {g:'Display', name:'Display/Display 5', font:'Open Sans', weight:'Bold',     wVal:700, size:24,  lh:32,  ls:0},
+  {g:'Header',  name:'Header/Header 1',   font:'Cabin',     weight:'Bold',     wVal:700, size:40,  lh:50,  ls:0},
+  {g:'Header',  name:'Header/Header 2',   font:'Cabin',     weight:'Bold',     wVal:700, size:36,  lh:44,  ls:0},
+  {g:'Header',  name:'Header/Header 3',   font:'Cabin',     weight:'Bold',     wVal:700, size:32,  lh:40,  ls:0},
+  {g:'Header',  name:'Header/Header 4',   font:'Cabin',     weight:'Bold',     wVal:700, size:24,  lh:30,  ls:0},
+  {g:'Header',  name:'Header/Header 5',   font:'Cabin',     weight:'Bold',     wVal:700, size:16,  lh:24,  ls:0},
+  {g:'Body',    name:'Body/Body 1',        font:'Open Sans', weight:'Regular',  wVal:400, size:18,  lh:27,  ls:0.25},
+  {g:'Body',    name:'Body/Body 2',        font:'Open Sans', weight:'Regular',  wVal:400, size:16,  lh:24,  ls:0.25},
+  {g:'Body',    name:'Body/Body 3',        font:'Open Sans', weight:'Regular',  wVal:400, size:14,  lh:21,  ls:0.25},
+  {g:'Body',    name:'Body/Body 4',        font:'Open Sans', weight:'Regular',  wVal:400, size:12,  lh:18,  ls:0.5},
+  {g:'Label',   name:'Label/Label',        font:'Open Sans', weight:'SemiBold', wVal:600, size:12,  lh:18,  ls:0.75}
+];
+
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+
+var state = {
+  tab: 'primitives',
+  primGroup: 'colors',
+  colorMode: 'Light',
+  spacingMode: 'Desktop',
+  query: ''
+};
+
+// ═══════════════════════════════════════════════════════════
+// RENDER — PRIMITIVES
+// ═══════════════════════════════════════════════════════════
+
+function renderPrimColors() {
+  var el = document.getElementById('prim-colors');
+  var q = state.query;
+  var groups = [
+    {label:'Common',  items:COLORS.common},
+    {label:'Navy',    items:COLORS.navy},
+    {label:'Resi',    items:COLORS.resi},
+    {label:'Red',     items:COLORS.red},
+    {label:'Green',   items:COLORS.green},
+    {label:'Yellow',  items:COLORS.yellow},
+    {label:'Purple',  items:COLORS.purple},
+    {label:'Blue',    items:COLORS.blue},
+    {label:'Grey',    items:COLORS.grey}
+  ];
+  var html = '';
+  groups.forEach(function(grp) {
+    var items = q ? grp.items.filter(function(c){ return c.name.toLowerCase().indexOf(q) > -1; }) : grp.items;
+    if (!items.length) return;
+    html += '<div class="token-group"><div class="group-title">'+grp.label+'</div><div class="palette-grid">';
+    items.forEach(function(c) {
+      var hex = toHex(c.r, c.g, c.b, c.a);
+      var dark = isDark(c.r, c.g, c.b);
+      var shortName = c.name.split('/').pop();
+      html += '<div class="swatch-card" onclick="copy(\''+c.name+'\')" title="'+c.name+'">'
+        +'<div class="swatch-color" style="background:'+hex+'">'
+        +'<span class="swatch-copy" style="color:'+(dark?'#fff':'#000')+'">⎘</span></div>'
+        +'<div class="swatch-info"><div class="swatch-name">'+shortName+'</div>'
+        +'<div class="swatch-hex">'+hex+'</div></div></div>';
+    });
+    html += '</div></div>';
+  });
+  el.innerHTML = html || noResults();
+}
+
+function renderPrimBrand() {
+  var el = document.getElementById('prim-brand');
+  var q = state.query;
+  var items = q ? BRAND.filter(function(c){ return c.name.toLowerCase().indexOf(q) > -1; }) : BRAND;
+  var html = '<div class="token-group"><div class="group-title">Brand Colors</div>'
+    +'<table class="token-table"><thead><tr><th>Token</th><th>Hex</th><th>Swatch</th></tr></thead><tbody>';
+  items.forEach(function(c) {
+    var hex = toHex(c.r, c.g, c.b, c.a);
+    html += '<tr><td>'+tokenEl(c.name)+'</td>'
+      +'<td><span class="color-hex">'+hex+'</span></td>'
+      +'<td><div class="color-swatch" style="background:'+hex+'"></div></td></tr>';
+  });
+  html += '</tbody></table></div>';
+  el.innerHTML = items.length ? html : noResults();
+}
+
+function renderPrimAlpha() {
+  var el = document.getElementById('prim-alpha');
+  var q = state.query;
+  var items = q ? ALPHA.filter(function(c){ return c.name.toLowerCase().indexOf(q) > -1; }) : ALPHA;
+  var html = '<div class="token-group"><div class="group-title">Alpha / Opacity</div>'
+    +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th><th>Swatch</th></tr></thead><tbody>';
+  items.forEach(function(c) {
+    var hex = toHex(c.r, c.g, c.b, c.a);
+    var solidHex = toHex(c.r, c.g, c.b, 1);
+    html += '<tr><td>'+tokenEl(c.name)+'</td>'
+      +'<td><span class="color-hex">'+hex+'</span></td>'
+      +'<td><div class="color-cell">'
+      +'<div class="checker"><div class="checker-fill" style="background:'+hex+'"></div></div>'
+      +'</div></td></tr>';
+  });
+  html += '</tbody></table></div>';
+  el.innerHTML = items.length ? html : noResults();
+}
+
+function renderPrimSizes() {
+  var el = document.getElementById('prim-sizes');
+  var q = state.query;
+  var items = q ? SIZES.filter(function(s){ return ('size/'+s).indexOf(q) > -1; }) : SIZES;
+  var MAX_BAR = 256, BAR_W = 160;
+  var html = '<div class="token-group"><div class="group-title">Size Scale — '+items.length+' values</div>'
+    +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th><th>Visual</th></tr></thead><tbody>';
+  items.forEach(function(s) {
+    var w = Math.max(2, Math.min(s, MAX_BAR) / MAX_BAR * BAR_W);
+    html += '<tr><td>'+tokenEl('size/'+s)+'</td>'
+      +'<td><span class="size-val">'+s+'px</span></td>'
+      +'<td><div class="size-bar-wrap"><div class="size-bar resi" style="width:'+w+'px"></div></div></td></tr>';
+  });
+  html += '</tbody></table></div>';
+  el.innerHTML = items.length ? html : noResults();
+}
+
+function renderPrimTypo() {
+  var el = document.getElementById('prim-typo');
+  var q = state.query;
+  var t = TYPO_PRIM;
+  var html = '';
+
+  // Font families
+  var ffItems = q ? t.fontFamily.filter(function(f){ return ('typography/font-family/'+f).toLowerCase().indexOf(q)>-1; }) : t.fontFamily;
+  if (ffItems.length) {
+    html += '<div class="token-group"><div class="group-title">Font Families</div>'
+      +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
+    ffItems.forEach(function(f) {
+      html += '<tr><td>'+tokenEl('typography/font-family/'+f)+'</td>'
+        +'<td>'+f+'</td>'
+        +'<td style="font-family:\''+f+'\',sans-serif;font-size:15px;color:#242528">The quick brown fox jumps over the lazy dog</td></tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+
+  // Font weights
+  var fwItems = q ? t.fontWeight.filter(function(w){ return ('typography/font-weight/'+w.name.toLowerCase()).indexOf(q)>-1; }) : t.fontWeight;
+  if (fwItems.length) {
+    html += '<div class="token-group"><div class="group-title">Font Weights</div>'
+      +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
+    fwItems.forEach(function(w) {
+      html += '<tr><td>'+tokenEl('typography/font-weight/'+w.name.toLowerCase())+'</td>'
+        +'<td>'+w.name+' ('+w.val+')</td>'
+        +'<td style="font-weight:'+w.val+';font-size:15px;color:#242528">'+w.name+'</td></tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+
+  // Font sizes
+  var fsItems = q ? t.fontSize.filter(function(s){ return ('typography/font-size/'+s+'px').indexOf(q)>-1; }) : t.fontSize;
+  if (fsItems.length) {
+    html += '<div class="token-group"><div class="group-title">Font Sizes</div>'
+      +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
+    fsItems.forEach(function(s) {
+      var preview = Math.min(s, 26);
+      html += '<tr><td>'+tokenEl('typography/font-size/'+s+'px')+'</td>'
+        +'<td><span class="size-val">'+s+'px</span></td>'
+        +'<td style="font-size:'+preview+'px;line-height:1.3;color:#242528">Aa</td></tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+
+  // Line heights
+  var lhItems = q ? t.lineHeight.filter(function(lh){ return ('typography/line-height/'+lh+'px').indexOf(q)>-1; }) : t.lineHeight;
+  if (lhItems.length) {
+    html += '<div class="token-group"><div class="group-title">Line Heights</div>'
+      +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th></tr></thead><tbody>';
+    lhItems.forEach(function(lh) {
+      html += '<tr><td>'+tokenEl('typography/line-height/'+lh+'px')+'</td>'
+        +'<td><span class="size-val">'+lh+'px</span></td></tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+
+  // Letter spacing
+  var lsItems = q ? t.letterSpacing.filter(function(ls){ return ls.tok.indexOf(q)>-1; }) : t.letterSpacing;
+  if (lsItems.length) {
+    html += '<div class="token-group"><div class="group-title">Letter Spacing</div>'
+      +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
+    lsItems.forEach(function(ls) {
+      html += '<tr><td>'+tokenEl(ls.tok)+'</td>'
+        +'<td><span class="size-val">'+ls.val+'px</span></td>'
+        +'<td style="letter-spacing:'+ls.val+'px;font-size:14px;color:#242528">Sample Text</td></tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+
+  el.innerHTML = html || noResults();
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER — SEMANTIC COLORS
+// ═══════════════════════════════════════════════════════════
+
+function renderSemantic() {
+  var el = document.getElementById('semantic-table');
+  var q = state.query;
+  var mode = state.colorMode;
+  var filtered = q ? SEMANTIC.filter(function(t){ return t.name.toLowerCase().indexOf(q)>-1; }) : SEMANTIC;
+
+  // Group
+  var groupMap = {};
+  filtered.forEach(function(t) {
+    if (!groupMap[t.g]) groupMap[t.g] = [];
+    groupMap[t.g].push(t);
+  });
+
+  var html = '';
+  Object.keys(groupMap).forEach(function(gName) {
+    var tokens = groupMap[gName];
+    html += '<div class="token-group"><div class="group-title">'+gName+'</div>';
+
+    if (mode === 'Both') {
+      html += '<table class="token-table"><thead><tr>'
+        +'<th>Token</th>'
+        +'<th>☀ Light Alias</th><th>☀ Light</th>'
+        +'<th>◗ Dark Alias</th><th>◗ Dark</th>'
+        +'</tr></thead><tbody>';
+      tokens.forEach(function(t) {
+        var lAlias = t.Light.alias, dAlias = t.Dark.alias;
+        var lP = PRIM_MAP[lAlias], dP = PRIM_MAP[dAlias];
+        var lHex = lP ? toHex(lP.r, lP.g, lP.b, lP.a) : '—';
+        var dHex = dP ? toHex(dP.r, dP.g, dP.b, dP.a) : '—';
+        html += '<tr><td>'+tokenEl(t.name)+'</td>'
+          +'<td><span class="tag-alias">'+lAlias+'</span></td>'
+          +'<td><div class="color-cell">'+(lP?'<div class="color-swatch" style="background:'+lHex+'"></div>':'')+' <span class="color-hex">'+lHex+'</span></div></td>'
+          +'<td><span class="tag-alias">'+dAlias+'</span></td>'
+          +'<td><div class="color-cell">'+(dP?'<div class="color-swatch" style="background:'+dHex+'"></div>':'')+' <span class="color-hex">'+dHex+'</span></div></td>'
+          +'</tr>';
+      });
+    } else {
+      html += '<table class="token-table"><thead><tr>'
+        +'<th>Token</th><th>Alias ('+mode+')</th><th>Value</th>'
+        +'</tr></thead><tbody>';
+      tokens.forEach(function(t) {
+        var modeData = t[mode];
+        var alias = modeData.alias;
+        var prim = PRIM_MAP[alias];
+        var hex = prim ? toHex(prim.r, prim.g, prim.b, prim.a) : '—';
+        html += '<tr><td>'+tokenEl(t.name)+'</td>'
+          +'<td><span class="tag-alias">'+alias+'</span></td>'
+          +'<td><div class="color-cell">'
+          +(prim?'<div class="'+(prim.a<1?'checker':'color-swatch')+'" style="background:'+hex+'">'+(prim.a<1?'<div class="checker-fill" style="background:'+hex+'"></div>':'')+'</div>':'')
+          +' <span class="color-hex">'+hex+'</span></div></td></tr>';
+      });
+    }
+    html += '</tbody></table></div>';
+  });
+
+  el.innerHTML = html || noResults();
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER — SPACING
+// ═══════════════════════════════════════════════════════════
+
+function renderSpacing() {
+  var el = document.getElementById('spacing-table');
+  var q = state.query;
+  var spMode = state.spacingMode;
+  var filtered = q ? SPACING.filter(function(t){ return t.name.toLowerCase().indexOf(q)>-1; }) : SPACING;
+
+  var groupMap = {};
+  filtered.forEach(function(t) {
+    if (!groupMap[t.g]) groupMap[t.g] = [];
+    groupMap[t.g].push(t);
+  });
+
+  var html = '';
+  Object.keys(groupMap).forEach(function(gName) {
+    var tokens = groupMap[gName];
+    html += '<div class="token-group"><div class="group-title">'+gName+'</div>'
+      +'<table class="token-table"><thead><tr>'
+      +'<th>Token</th><th>Scope</th><th>Alias</th><th>Value ('+spMode+')</th><th>Visual</th>'
+      +'</tr></thead><tbody>';
+    tokens.forEach(function(t) {
+      var mv = t[spMode];
+      var alias = '', value = 0;
+      if (typeof mv === 'object' && mv && mv.alias) {
+        alias = mv.alias;
+        var pr = PRIM_MAP[alias];
+        value = pr ? pr.value : 0;
+      } else {
+        value = mv; alias = '';
+      }
+      var isRadius = t.name.indexOf('border-radius') > -1;
+      var barW = Math.max(2, Math.min(value, 128) / 128 * 160);
+      var visual = isRadius
+        ? '<div style="width:'+Math.min(40,value+8)+'px;height:'+Math.min(40,value+8)+'px;border-radius:'+(value===9999?9999:value)+'px;border:2px solid #FF585D;opacity:.75"></div>'
+        : '<div class="size-bar-wrap"><div class="size-bar resi" style="width:'+barW+'px"></div></div>';
+      html += '<tr><td>'+tokenEl(t.name)+'</td>'
+        +'<td><span class="color-alias" style="font-size:11px">'+t.scope+'</span></td>'
+        +'<td>'+(alias?'<span class="tag-alias">'+alias+'</span>':'—')+'</td>'
+        +'<td><span class="size-val">'+(value===9999?'9999px (pill)':value+'px')+'</span></td>'
+        +'<td>'+visual+'</td></tr>';
+    });
+    html += '</tbody></table></div>';
+  });
+
+  el.innerHTML = html || noResults();
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER — TYPOGRAPHY
+// ═══════════════════════════════════════════════════════════
+
+function renderTypography() {
+  var el = document.getElementById('typography-table');
+  var q = state.query;
+  var filtered = q ? TYPO_STYLES.filter(function(t){ return t.name.toLowerCase().indexOf(q)>-1; }) : TYPO_STYLES;
+  var groups = ['Display','Header','Body','Label'];
+  var html = '';
+  groups.forEach(function(gName) {
+    var items = filtered.filter(function(t){ return t.g === gName; });
+    if (!items.length) return;
+    html += '<div class="token-group"><div class="group-title">'+gName+'</div>'
+      +'<table class="token-table"><thead><tr>'
+      +'<th>Style</th><th>Font</th><th>Weight</th>'
+      +'<th>Size</th><th>Line Height</th><th>Letter Spacing</th>'
+      +'<th style="min-width:220px">Preview</th>'
+      +'</tr></thead><tbody>';
+    items.forEach(function(t) {
+      var previewSize = Math.min(t.size, 28);
+      var styleName = t.name.split('/').pop();
+      html += '<tr><td>'+tokenEl(t.name)+'</td>'
+        +'<td><span class="color-alias">'+t.font+'</span></td>'
+        +'<td><span class="color-alias">'+t.weight+'</span></td>'
+        +'<td><span class="size-val">'+t.size+'px</span></td>'
+        +'<td><span class="size-val">'+t.lh+'px</span></td>'
+        +'<td><span class="size-val">'+t.ls+'px</span></td>'
+        +'<td style="font-family:\''+t.font+'\',sans-serif;font-size:'+previewSize+'px;font-weight:'+t.wVal+';letter-spacing:'+t.ls+'px;line-height:1.3;color:#242528">The quick brown fox</td>'
+        +'</tr>';
+    });
+    html += '</tbody></table></div>';
+  });
+  el.innerHTML = html || noResults();
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// CONTROLS
+// ═══════════════════════════════════════════════════════════
+
+function showTab(tab) {
+  state.tab = tab;
+  var tabs = ['primitives','semantic','spacing','typography'];
+  document.querySelectorAll('.tab-btn').forEach(function(btn, i) {
+    btn.classList.toggle('active', tabs[i] === tab);
+  });
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('tab-'+tab).classList.add('active');
+  renderCurrent();
+}
+
+function showPrimGroup(g) {
+  state.primGroup = g;
+  var groups = ['colors','brand','alpha','sizes','typo'];
+  document.querySelectorAll('#prim-subtabs .sub-tab-btn').forEach(function(btn, i) {
+    btn.classList.toggle('active', groups[i] === g);
+  });
+  groups.forEach(function(name) {
+    document.getElementById('prim-'+name).classList.toggle('hidden', name !== g);
+  });
+  renderPrimGroupCurrent();
+}
+
+function renderPrimGroupCurrent() {
+  var g = state.primGroup;
+  if (g === 'colors') renderPrimColors();
+  else if (g === 'brand') renderPrimBrand();
+  else if (g === 'alpha') renderPrimAlpha();
+  else if (g === 'sizes') renderPrimSizes();
+  else if (g === 'typo') renderPrimTypo();
+}
+
+function setColorMode(mode) {
+  state.colorMode = mode;
+  document.querySelectorAll('#color-mode-toggle .mode-btn').forEach(function(btn, i) {
+    btn.classList.toggle('active', ['Light','Dark','Both'][i] === mode);
+  });
+  renderSemantic();
+}
+
+function setSpacingMode(mode) {
+  state.spacingMode = mode;
+  document.querySelectorAll('#spacing-mode-toggle .mode-btn').forEach(function(btn, i) {
+    btn.classList.toggle('active', ['Desktop','Tablet','Mobile'][i] === mode);
+  });
+  renderSpacing();
+}
+
+function filterTokens(q) {
+  state.query = q.toLowerCase().trim();
+  renderCurrent();
+}
+
+function renderCurrent() {
+  var t = state.tab;
+  if (t === 'primitives') renderPrimGroupCurrent();
+  else if (t === 'semantic') renderSemantic();
+  else if (t === 'spacing') renderSpacing();
+  else if (t === 'typography') renderTypography();
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+
+renderPrimColors();
+renderSemantic();
+renderSpacing();
+renderTypography();
+</script>
+</body>
+</html>
