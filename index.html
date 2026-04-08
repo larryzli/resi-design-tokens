@@ -115,6 +115,10 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
     #semantic-table .token-table { table-layout: fixed; }
+    #prim-sizes .token-table { table-layout: fixed; }
+    #prim-typo .token-table      { table-layout: fixed; }
+    #spacing-table .token-table  { table-layout: fixed; }
+    #typography-table .token-table { table-layout: fixed; }
     .token-table thead th {
       background: #F5F6FA; padding: 9px 14px; text-align: left;
       font-size: 10.5px; font-weight: 700; text-transform: uppercase;
@@ -798,14 +802,13 @@ function renderPrimSizes() {
   var el = document.getElementById('prim-sizes');
   var q = state.query;
   var items = q ? SIZES.filter(function(s){ return ('size/'+s).indexOf(q) > -1; }) : SIZES;
-  var MAX_BAR = 256, BAR_W = 160;
   var html = '<div class="token-group"><div class="group-title">Size Scale — '+items.length+' values</div>'
-    +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th><th>Visual</th></tr></thead><tbody>';
+    +'<table class="token-table"><colgroup><col style="width:30%"><col style="width:15%"><col style="width:55%"></colgroup><thead><tr><th>Token</th><th>Value</th><th>Visual</th></tr></thead><tbody>';
   items.forEach(function(s) {
-    var w = Math.max(2, Math.min(s, MAX_BAR) / MAX_BAR * BAR_W);
+    var w = Math.max(2, s);
     html += '<tr><td>'+tokenEl('size/'+s)+'</td>'
       +'<td><span class="size-val">'+s+'px</span></td>'
-      +'<td><div class="size-bar-wrap"><div class="size-bar resi" style="width:'+w+'px"></div></div></td></tr>';
+      +'<td><div class="size-bar-wrap" style="overflow:hidden"><div class="size-bar resi" style="width:'+w+'px;flex-shrink:0"></div></div></td></tr>';
   });
   html += '</tbody></table></div>';
   el.innerHTML = items.length ? html : noResults();
@@ -821,7 +824,7 @@ function renderPrimTypo() {
   var ffItems = q ? t.fontFamily.filter(function(f){ return ('typography/font-family/'+f).toLowerCase().indexOf(q)>-1; }) : t.fontFamily;
   if (ffItems.length) {
     html += '<div class="token-group"><div class="group-title">Font Families</div>'
-      +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
+      +'<table class="token-table"><colgroup><col style="width:45%"><col style="width:20%"><col style="width:35%"></colgroup><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
     ffItems.forEach(function(f) {
       html += '<tr><td>'+tokenEl('typography/font-family/'+f)+'</td>'
         +'<td>'+f+'</td>'
@@ -834,7 +837,7 @@ function renderPrimTypo() {
   var fwItems = q ? t.fontWeight.filter(function(w){ return ('typography/font-weight/'+w.name.toLowerCase()).indexOf(q)>-1; }) : t.fontWeight;
   if (fwItems.length) {
     html += '<div class="token-group"><div class="group-title">Font Weights</div>'
-      +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
+      +'<table class="token-table"><colgroup><col style="width:45%"><col style="width:20%"><col style="width:35%"></colgroup><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
     fwItems.forEach(function(w) {
       html += '<tr><td>'+tokenEl('typography/font-weight/'+w.name.toLowerCase())+'</td>'
         +'<td>'+w.name+' ('+w.val+')</td>'
@@ -847,7 +850,7 @@ function renderPrimTypo() {
   var fsItems = q ? t.fontSize.filter(function(s){ return ('typography/font-size/'+s+'px').indexOf(q)>-1; }) : t.fontSize;
   if (fsItems.length) {
     html += '<div class="token-group"><div class="group-title">Font Sizes</div>'
-      +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
+      +'<table class="token-table"><colgroup><col style="width:45%"><col style="width:20%"><col style="width:35%"></colgroup><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
     fsItems.forEach(function(s) {
       var preview = Math.min(s, 26);
       html += '<tr><td>'+tokenEl('typography/font-size/'+s+'px')+'</td>'
@@ -861,7 +864,7 @@ function renderPrimTypo() {
   var lhItems = q ? t.lineHeight.filter(function(lh){ return ('typography/line-height/'+lh+'px').indexOf(q)>-1; }) : t.lineHeight;
   if (lhItems.length) {
     html += '<div class="token-group"><div class="group-title">Line Heights</div>'
-      +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th></tr></thead><tbody>';
+      +'<table class="token-table"><colgroup><col style="width:45%"><col style="width:55%"></colgroup><thead><tr><th>Token</th><th>Value</th></tr></thead><tbody>';
     lhItems.forEach(function(lh) {
       html += '<tr><td>'+tokenEl('typography/line-height/'+lh+'px')+'</td>'
         +'<td><span class="size-val">'+lh+'px</span></td></tr>';
@@ -873,7 +876,7 @@ function renderPrimTypo() {
   var lsItems = q ? t.letterSpacing.filter(function(ls){ return ls.tok.indexOf(q)>-1; }) : t.letterSpacing;
   if (lsItems.length) {
     html += '<div class="token-group"><div class="group-title">Letter Spacing</div>'
-      +'<table class="token-table"><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
+      +'<table class="token-table"><colgroup><col style="width:45%"><col style="width:20%"><col style="width:35%"></colgroup><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
     lsItems.forEach(function(ls) {
       html += '<tr><td>'+tokenEl(ls.tok)+'</td>'
         +'<td><span class="size-val">'+ls.val+'px</span></td>'
@@ -971,7 +974,7 @@ function renderSpacing() {
   Object.keys(groupMap).forEach(function(gName) {
     var tokens = groupMap[gName];
     html += '<div class="token-group"><div class="group-title">'+gName+'</div>'
-      +'<table class="token-table"><thead><tr>'
+      +'<table class="token-table"><colgroup><col style="width:25%"><col style="width:12%"><col style="width:22%"><col style="width:15%"><col style="width:26%"></colgroup><thead><tr>'
       +'<th>Token</th><th>Scope</th><th>Alias</th><th>Value ('+spMode+')</th><th>Visual</th>'
       +'</tr></thead><tbody>';
     tokens.forEach(function(t) {
@@ -1015,10 +1018,10 @@ function renderTypography() {
     var items = filtered.filter(function(t){ return t.g === gName; });
     if (!items.length) return;
     html += '<div class="token-group"><div class="group-title">'+gName+'</div>'
-      +'<table class="token-table"><thead><tr>'
+      +'<table class="token-table"><colgroup><col style="width:20%"><col style="width:12%"><col style="width:10%"><col style="width:8%"><col style="width:10%"><col style="width:12%"><col style="width:28%"></colgroup><thead><tr>'
       +'<th>Style</th><th>Font</th><th>Weight</th>'
       +'<th>Size</th><th>Line Height</th><th>Letter Spacing</th>'
-      +'<th style="min-width:220px">Preview</th>'
+      +'<th>Preview</th>'
       +'</tr></thead><tbody>';
     items.forEach(function(t) {
       var previewSize = Math.min(t.size, 28);
