@@ -1024,7 +1024,7 @@ function renderTypography() {
   var el = document.getElementById('typography-table');
   var q = state.query;
   var filtered = q ? TYPO_STYLES.filter(function(t){ return t.name.toLowerCase().indexOf(q)>-1; }) : TYPO_STYLES;
-  var groups = ['Display','Header','Body','Label'];
+  var groups = ['Display','Header','Body','Button','Label'];
   var html = '';
   groups.forEach(function(gName) {
     var items = filtered.filter(function(t){ return t.g === gName; });
