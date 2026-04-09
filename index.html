@@ -432,10 +432,10 @@ function copy(text) {
     el.select(); document.execCommand('copy'); document.body.removeChild(el);
   });
   var t = document.getElementById('toast');
-  t.textContent = 'Copied: ' + text;
+  t.textContent = 'Copied!';
   t.classList.add('show');
   clearTimeout(window._tt);
-  window._tt = setTimeout(function(){ t.classList.remove('show'); }, 2000);
+  window._tt = setTimeout(function(){ t.classList.remove('show'); }, 3000);
 }
 
 function tokenEl(name) {
@@ -523,8 +523,25 @@ var COLORS = {
   ],
   blue: [
     {name:'colors/blue/100', r:.8980, g:.9412, b:1,     a:1},
+    {name:'colors/blue/200', r:.6706, g:.8157, b:.9922, a:1},
     {name:'colors/blue/300', r:.4471, g:.6824, b:.9882, a:1},
-    {name:'colors/blue/500', r:0,     g:.4157, b:.9804, a:1}
+    {name:'colors/blue/400', r:.2235, g:.5490, b:.9843, a:1},
+    {name:'colors/blue/500', r:0,     g:.4157, b:.9804, a:1},
+    {name:'colors/blue/600', r:.0196, g:.2902, b:.8196, a:1},
+    {name:'colors/blue/700', r:0,     g:.2314, b:.5412, a:1},
+    {name:'colors/blue/800', r:0,     g:.1373, b:.3216, a:1},
+    {name:'colors/blue/900', r:0,     g:.0431, b:.1020, a:1}
+  ],
+  teal: [
+    {name:'colors/teal/100', r:.8980, g:.9647, b:.9647, a:1},
+    {name:'colors/teal/200', r:.6706, g:.8824, b:.8824, a:1},
+    {name:'colors/teal/300', r:.4471, g:.7608, b:.7608, a:1},
+    {name:'colors/teal/400', r:.2235, g:.6392, b:.6392, a:1},
+    {name:'colors/teal/500', r:0,     g:.5176, b:.5176, a:1},
+    {name:'colors/teal/600', r:0,     g:.4157, b:.4157, a:1},
+    {name:'colors/teal/700', r:0,     g:.3098, b:.3098, a:1},
+    {name:'colors/teal/800', r:0,     g:.2078, b:.2078, a:1},
+    {name:'colors/teal/900', r:0,     g:.1020, b:.1020, a:1}
   ],
   grey: [
     {name:'colors/grey/050',  r:.9843, g:.9843, b:.9843, a:1},
@@ -579,7 +596,7 @@ var PRIM_MAP = {};
 (function() {
   var all = [].concat(
     COLORS.common, COLORS.navy, COLORS.resi, COLORS.red, COLORS.green,
-    COLORS.yellow, COLORS.purple, COLORS.blue, COLORS.grey, BRAND, ALPHA
+    COLORS.yellow, COLORS.purple, COLORS.blue, COLORS.teal, COLORS.grey, BRAND, ALPHA
   );
   all.forEach(function(c){ PRIM_MAP[c.name] = c; });
   SIZES.forEach(function(s){ PRIM_MAP['size/'+s] = {value:s}; });
@@ -591,10 +608,9 @@ var SEMANTIC = [
   {g:'text', name:'text/body',          Light:{alias:'colors/grey/800'},       Dark:{alias:'colors/grey/200'}},
   {g:'text', name:'text/title',         Light:{alias:'colors/grey/1000'},      Dark:{alias:'colors/grey/100'}},
   {g:'text', name:'text/secondary',     Light:{alias:'colors/grey/600'},       Dark:{alias:'colors/grey/300'}},
-  {g:'text', name:'text/disabled',      Light:{alias:'colors/grey/500'},       Dark:{alias:'colors/grey/600'}},
   {g:'text', name:'text/light',         Light:{alias:'colors/grey/100'},       Dark:{alias:'colors/grey/100'}},
   {g:'text', name:'text/link/default',  Light:{alias:'colors/navy/500'},       Dark:{alias:'colors/navy/300'}},
-  {g:'text', name:'text/link/visited',  Light:{alias:'colors/purple/500'},     Dark:{alias:'colors/purple/300'}},
+  {g:'text', name:'text/link/visited',  Light:{alias:'colors/navy/500'},       Dark:{alias:'colors/navy/300'}},
   // Surface
   {g:'surface', name:'surface/canvas',  Light:{alias:'colors/common/white'},   Dark:{alias:'colors/grey/1000'}},
   {g:'surface', name:'surface/default', Light:{alias:'colors/grey/100'},       Dark:{alias:'colors/grey/1100'}},
@@ -602,7 +618,7 @@ var SEMANTIC = [
   {g:'surface', name:'surface/inverse', Light:{alias:'colors/grey/1000'},      Dark:{alias:'colors/grey/050'}},
   // Border
   {g:'border', name:'border',           Light:{alias:'colors/grey/400'},       Dark:{alias:'colors/grey/600'}},
-  {g:'border', name:'divider',          Light:{alias:'colors/grey/300'},       Dark:{alias:'colors/grey/800'}},
+  {g:'border', name:'divider',          Light:{alias:'colors/grey/300'},       Dark:{alias:'colors/grey/700'}},
   {g:'border', name:'focus',            Light:{alias:'colors/navy/200'},       Dark:{alias:'colors/navy/200'}},
   // Disabled
   {g:'disabled', name:'disabled/background', Light:{alias:'colors/grey/200'}, Dark:{alias:'colors/grey/800'}},
@@ -610,35 +626,35 @@ var SEMANTIC = [
   // Action / Primary (Navy)
   {g:'action/primary', name:'action/primary/main',           Light:{alias:'colors/navy/500'}, Dark:{alias:'colors/navy/400'}},
   {g:'action/primary', name:'action/primary/hover',          Light:{alias:'colors/navy/400'}, Dark:{alias:'colors/navy/500'}},
-  {g:'action/primary', name:'action/primary/active',         Light:{alias:'colors/navy/600'}, Dark:{alias:'colors/navy/300'}},
+  {g:'action/primary', name:'action/primary/active',         Light:{alias:'colors/navy/600'}, Dark:{alias:'colors/navy/600'}},
   {g:'action/primary', name:'action/primary/foreground',     Light:{alias:'colors/navy/600'}, Dark:{alias:'colors/navy/300'}},
   {g:'action/primary', name:'action/primary/background',     Light:{alias:'colors/navy/100'}, Dark:{alias:'colors/navy/800'}},
   {g:'action/primary', name:'action/primary/alt-background', Light:{alias:'colors/navy/200'}, Dark:{alias:'colors/navy/900'}},
   // Action / Accent (Resi Red)
   {g:'action/accent', name:'action/accent/main',           Light:{alias:'colors/resi/500'}, Dark:{alias:'colors/resi/400'}},
   {g:'action/accent', name:'action/accent/hover',          Light:{alias:'colors/resi/400'}, Dark:{alias:'colors/resi/500'}},
-  {g:'action/accent', name:'action/accent/active',         Light:{alias:'colors/resi/600'}, Dark:{alias:'colors/resi/300'}},
+  {g:'action/accent', name:'action/accent/active',         Light:{alias:'colors/resi/600'}, Dark:{alias:'colors/resi/600'}},
   {g:'action/accent', name:'action/accent/foreground',     Light:{alias:'colors/resi/600'}, Dark:{alias:'colors/resi/300'}},
   {g:'action/accent', name:'action/accent/background',     Light:{alias:'colors/resi/100'}, Dark:{alias:'colors/resi/800'}},
   {g:'action/accent', name:'action/accent/alt-background', Light:{alias:'colors/resi/200'}, Dark:{alias:'colors/resi/900'}},
   // Action / Negative (Red)
   {g:'action/negative', name:'action/negative/main',           Light:{alias:'colors/red/500'}, Dark:{alias:'colors/red/400'}},
   {g:'action/negative', name:'action/negative/hover',          Light:{alias:'colors/red/400'}, Dark:{alias:'colors/red/500'}},
-  {g:'action/negative', name:'action/negative/active',         Light:{alias:'colors/red/600'}, Dark:{alias:'colors/red/300'}},
+  {g:'action/negative', name:'action/negative/active',         Light:{alias:'colors/red/600'}, Dark:{alias:'colors/red/600'}},
   {g:'action/negative', name:'action/negative/foreground',     Light:{alias:'colors/red/600'}, Dark:{alias:'colors/red/300'}},
   {g:'action/negative', name:'action/negative/background',     Light:{alias:'colors/red/100'}, Dark:{alias:'colors/red/800'}},
   {g:'action/negative', name:'action/negative/alt-background', Light:{alias:'colors/red/200'}, Dark:{alias:'colors/red/900'}},
   // Action / Positive (Green)
   {g:'action/positive', name:'action/positive/main',           Light:{alias:'colors/green/500'}, Dark:{alias:'colors/green/400'}},
   {g:'action/positive', name:'action/positive/hover',          Light:{alias:'colors/green/400'}, Dark:{alias:'colors/green/500'}},
-  {g:'action/positive', name:'action/positive/active',         Light:{alias:'colors/green/600'}, Dark:{alias:'colors/green/300'}},
+  {g:'action/positive', name:'action/positive/active',         Light:{alias:'colors/green/600'}, Dark:{alias:'colors/green/600'}},
   {g:'action/positive', name:'action/positive/foreground',     Light:{alias:'colors/green/600'}, Dark:{alias:'colors/green/300'}},
   {g:'action/positive', name:'action/positive/background',     Light:{alias:'colors/green/100'}, Dark:{alias:'colors/green/800'}},
   {g:'action/positive', name:'action/positive/alt-background', Light:{alias:'colors/green/200'}, Dark:{alias:'colors/green/900'}},
   // Action / Warning (Yellow)
   {g:'action/warning', name:'action/warning/main',           Light:{alias:'colors/yellow/500'}, Dark:{alias:'colors/yellow/400'}},
   {g:'action/warning', name:'action/warning/hover',          Light:{alias:'colors/yellow/400'}, Dark:{alias:'colors/yellow/500'}},
-  {g:'action/warning', name:'action/warning/active',         Light:{alias:'colors/yellow/600'}, Dark:{alias:'colors/yellow/300'}},
+  {g:'action/warning', name:'action/warning/active',         Light:{alias:'colors/yellow/600'}, Dark:{alias:'colors/yellow/600'}},
   {g:'action/warning', name:'action/warning/foreground',     Light:{alias:'colors/yellow/600'}, Dark:{alias:'colors/yellow/300'}},
   {g:'action/warning', name:'action/warning/background',     Light:{alias:'colors/yellow/100'}, Dark:{alias:'colors/yellow/800'}},
   {g:'action/warning', name:'action/warning/alt-background', Light:{alias:'colors/yellow/200'}, Dark:{alias:'colors/yellow/900'}},
@@ -649,13 +665,6 @@ var SEMANTIC = [
   {g:'action/neutral', name:'action/neutral/foreground',     Light:{alias:'colors/grey/900'}, Dark:{alias:'colors/grey/100'}},
   {g:'action/neutral', name:'action/neutral/background',     Light:{alias:'colors/grey/300'}, Dark:{alias:'colors/grey/700'}},
   {g:'action/neutral', name:'action/neutral/alt-background', Light:{alias:'colors/grey/400'}, Dark:{alias:'colors/grey/800'}},
-  // Action / Smart (Purple)
-  {g:'action/smart', name:'action/smart/main',           Light:{alias:'colors/purple/500'}, Dark:{alias:'colors/purple/400'}},
-  {g:'action/smart', name:'action/smart/hover',          Light:{alias:'colors/purple/400'}, Dark:{alias:'colors/purple/500'}},
-  {g:'action/smart', name:'action/smart/active',         Light:{alias:'colors/purple/600'}, Dark:{alias:'colors/purple/300'}},
-  {g:'action/smart', name:'action/smart/foreground',     Light:{alias:'colors/purple/600'}, Dark:{alias:'colors/purple/300'}},
-  {g:'action/smart', name:'action/smart/background',     Light:{alias:'colors/purple/100'}, Dark:{alias:'colors/purple/800'}},
-  {g:'action/smart', name:'action/smart/alt-background', Light:{alias:'colors/purple/200'}, Dark:{alias:'colors/purple/900'}},
   // Brand
   {g:'brand', name:'brand/resi-main',      Light:{alias:'brand/resi-red'}, Dark:{alias:'brand/resi-red'}},
   {g:'brand', name:'brand/resi-alternate', Light:{alias:'brand/fiord'},    Dark:{alias:'brand/fiord'}},
@@ -663,7 +672,7 @@ var SEMANTIC = [
   {g:'brand', name:'brand/resi-bg-alt',    Light:{alias:'brand/fedora'},   Dark:{alias:'brand/fedora'}},
   {g:'brand', name:'brand/pushpay-main',   Light:{alias:'brand/pushpay'},  Dark:{alias:'brand/pushpay'}},
   // Utility
-  {g:'utility', name:'utility/contrast',               Light:{alias:'colors/common/black'}, Dark:{alias:'colors/common/white'}},
+  {g:'utility', name:'utility/contrast',               Light:{alias:'colors/common/black'}, Dark:{alias:'colors/grey/100'}},
   {g:'utility', name:'utility/contrast-inverse',        Light:{alias:'colors/common/white'}, Dark:{alias:'colors/common/black'}},
   {g:'utility', name:'utility/gradient/canvas/full',    Light:{alias:'alpha/white/100%'},    Dark:{alias:'alpha/1000/100%'}},
   {g:'utility', name:'utility/gradient/canvas/empty',   Light:{alias:'alpha/white/0%'},      Dark:{alias:'alpha/1000/0%'}},
@@ -705,6 +714,7 @@ var TYPO_STYLES = [
   {g:'Header',  name:'Header/Header 3',   font:'Cabin',     weight:'Bold',     wVal:700, size:32,  lh:40,  ls:0},
   {g:'Header',  name:'Header/Header 4',   font:'Cabin',     weight:'Bold',     wVal:700, size:24,  lh:30,  ls:0},
   {g:'Header',  name:'Header/Header 5',   font:'Cabin',     weight:'Bold',     wVal:700, size:16,  lh:24,  ls:0},
+  {g:'Header',  name:'Header/Header 6',   font:'Cabin',     weight:'Bold',     wVal:700, size:14,  lh:22,  ls:0},
   {g:'Body',    name:'Body/Body 1',        font:'Open Sans', weight:'Regular',  wVal:400, size:18,  lh:27,  ls:0.25},
   {g:'Body',    name:'Body/Body 2',        font:'Open Sans', weight:'Regular',  wVal:400, size:16,  lh:24,  ls:0.25},
   {g:'Body',    name:'Body/Body 3',        font:'Open Sans', weight:'Regular',  wVal:400, size:14,  lh:21,  ls:0.25},
@@ -741,6 +751,7 @@ function renderPrimColors() {
     {label:'Yellow',  items:COLORS.yellow},
     {label:'Purple',  items:COLORS.purple},
     {label:'Blue',    items:COLORS.blue},
+    {label:'Teal',    items:COLORS.teal},
     {label:'Grey',    items:COLORS.grey}
   ];
   var html = '';
@@ -990,7 +1001,7 @@ function renderSpacing() {
       var isRadius = t.name.indexOf('border-radius') > -1;
       var barW = Math.max(2, Math.min(value, 128) / 128 * 160);
       var visual = isRadius
-        ? '<div style="width:'+Math.min(40,value+8)+'px;height:'+Math.min(40,value+8)+'px;border-radius:'+(value===9999?9999:value)+'px;border:2px solid #FF585D;opacity:.75"></div>'
+        ? '<div style="width:32px;height:32px;border-radius:'+(value===9999?9999:value)+'px;border:2px solid #FF585D;opacity:.75"></div>'
         : '<div class="size-bar-wrap"><div class="size-bar resi" style="width:'+barW+'px"></div></div>';
       html += '<tr><td>'+tokenEl(t.name)+'</td>'
         +'<td><span class="color-alias" style="font-size:11px">'+t.scope+'</span></td>'
