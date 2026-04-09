@@ -293,7 +293,7 @@
     <div class="logo-mark">R</div>
     <div>
       <div class="logo-name">Resi Design Tokens</div>
-      <div class="logo-sub">Resi Design Components · Version 1.0</div>
+      <div class="logo-sub">Resi Design Components · Version 1.1</div>
     </div>
   </div>
   <div class="search-wrap">
@@ -864,10 +864,9 @@ function renderPrimTypo() {
     html += '<div class="token-group"><div class="group-title">Font Sizes</div>'
       +'<table class="token-table"><colgroup><col style="width:45%"><col style="width:20%"><col style="width:35%"></colgroup><thead><tr><th>Token</th><th>Value</th><th>Preview</th></tr></thead><tbody>';
     fsItems.forEach(function(s) {
-      var preview = Math.min(s, 26);
       html += '<tr><td>'+tokenEl('typography/font-size/'+s+'px')+'</td>'
         +'<td><span class="size-val">'+s+'px</span></td>'
-        +'<td style="font-size:'+preview+'px;line-height:1.3;color:#242528">Aa</td></tr>';
+        +'<td><div style="font-size:'+s+'px;line-height:1.3;color:#242528;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Aa</div></td></tr>';
     });
     html += '</tbody></table></div>';
   }
@@ -1024,7 +1023,7 @@ function renderTypography() {
   var el = document.getElementById('typography-table');
   var q = state.query;
   var filtered = q ? TYPO_STYLES.filter(function(t){ return t.name.toLowerCase().indexOf(q)>-1; }) : TYPO_STYLES;
-  var groups = ['Display','Header','Body','Button','Label'];
+  var groups = ['Header','Body','Button','Label','Display'];
   var html = '';
   groups.forEach(function(gName) {
     var items = filtered.filter(function(t){ return t.g === gName; });
@@ -1036,7 +1035,7 @@ function renderTypography() {
       +'<th>Preview</th>'
       +'</tr></thead><tbody>';
     items.forEach(function(t) {
-      var previewSize = Math.min(t.size, 28);
+      var previewSize = t.size;
       var styleName = t.name.split('/').pop();
       html += '<tr><td>'+tokenEl(t.name)+'</td>'
         +'<td><span class="color-alias">'+t.font+'</span></td>'
@@ -1044,7 +1043,7 @@ function renderTypography() {
         +'<td><span class="size-val">'+t.size+'px</span></td>'
         +'<td><span class="size-val">'+t.lh+'px</span></td>'
         +'<td><span class="size-val">'+t.ls+'px</span></td>'
-        +'<td style="font-family:\''+t.font+'\',sans-serif;font-size:'+previewSize+'px;font-weight:'+t.wVal+';letter-spacing:'+t.ls+'px;line-height:1.3;color:#242528">The quick brown fox</td>'
+        +'<td><div style="font-family:\''+t.font+'\',sans-serif;font-size:'+previewSize+'px;font-weight:'+t.wVal+';letter-spacing:'+t.ls+'px;line-height:1.3;color:#242528;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">The quick brown fox</div></td>'
         +'</tr>';
     });
     html += '</tbody></table></div>';
